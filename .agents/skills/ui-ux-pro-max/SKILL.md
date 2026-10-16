@@ -1,6 +1,6 @@
 ---
 name: ui-ux-pro-max
-description: "UI/UX design intelligence for web and mobile. Includes 50+ styles, 161 color palettes, 57 font pairings, 161 product types, 99 UX guidelines, and 25 chart types across 10 stacks (React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, Tailwind, shadcn/ui, and HTML/CSS). Actions: plan, build, create, design, implement, review, fix, improve, optimize, enhance, refactor, and check UI/UX code. Projects: website, landing page, dashboard, admin panel, e-commerce, SaaS, portfolio, blog, and mobile app. Elements: button, modal, navbar, sidebar, card, table, form, and chart. Styles: glassmorphism, claymorphism, minimalism, brutalism, neumorphism, bento grid, dark mode, responsive, skeuomorphism, and flat design. Topics: color systems, accessibility, animation, layout, typography, font pairing, spacing, interaction states, shadow, and gradient. Integrations: shadcn/ui MCP for component search and examples."
+description: "Optional searchable UI/UX reference for substantial design exploration, accessibility questions, or unfamiliar interaction patterns. Use targeted guidance when it helps; routine UI implementation does not require generating or persisting a design system."
 ---
 
 # UI/UX Pro Max - Design Intelligence
@@ -9,11 +9,11 @@ Comprehensive design guide for web and mobile applications. Contains 50+ styles,
 
 ## When to Apply
 
-This Skill should be used when the task involves **UI structure, visual design decisions, interaction patterns, or user experience quality control**.
+Use the relevant reference or search when it improves a design decision. Existing design context and engineering judgment are sufficient for routine implementation.
 
-### Must Use
+### Useful contexts
 
-This Skill must be invoked in the following situations:
+Possible uses include:
 
 - Designing new pages (Landing Page, Dashboard, Admin, SaaS, Mobile App)
 - Creating or refactoring UI components (buttons, modals, forms, tables, charts, etc.)
@@ -43,7 +43,7 @@ This Skill is not needed in the following situations:
 - Infrastructure or DevOps work
 - Non-visual scripts or automation tasks
 
-**Decision criteria**: If the task will change how a feature **looks, feels, moves, or is interacted with**, this Skill should be used.
+Choose this reference for a design question that benefits from it; it is not a prerequisite for every visual or interaction change.
 
 ## Rule Categories by Priority
 
@@ -348,7 +348,7 @@ Use this skill when the user requests any of the following:
 | **Add charts / data viz** | "Add an analytics dashboard chart" | Step 3 (domain: chart) |
 | **Stack best practices** | "React performance tips"、"SwiftUI navigation" | Step 4 (stack search) |
 
-Follow this workflow:
+The following searches and examples are optional; use only the parts relevant to the task:
 
 ### Step 1: Analyze User Requirements
 
@@ -356,14 +356,14 @@ Extract key information from user request:
 - **Product type**: Entertainment (social, video, music, gaming), Tool (scanner, editor, converter), Productivity (task manager, notes, calendar), or hybrid
 - **Target audience**: C-end consumer users; consider age group, usage context (commute, leisure, work)
 - **Style keywords**: playful, vibrant, minimal, dark mode, content-first, immersive, etc.
-- **Stack**: React Native (this project's only tech stack)
+- **Stack**: the application's actual framework and platform; choose technologies appropriate to the task
 
-### Step 2: Generate Design System (REQUIRED)
+### Step 2: Optional Design-System Exploration
 
-**Always start with `--design-system`** to get comprehensive recommendations with reasoning:
+For a new visual direction or a requested design system, `--design-system` can suggest a coherent starting point. Skip this for focused fixes or an established design:
 
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "<product_type> <industry> <keywords>" --design-system [-p "Project Name"]
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "<product_type> <industry> <keywords>" --design-system [-p "Project Name"]
 ```
 
 This command:
@@ -374,15 +374,15 @@ This command:
 
 **Example:**
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "beauty spa wellness service" --design-system -p "Serenity Spa"
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "beauty spa wellness service" --design-system -p "Serenity Spa"
 ```
 
-### Step 2b: Persist Design System (Master + Overrides Pattern)
+### Step 2b: Optional persistence for a requested design system
 
-To save the design system for **hierarchical retrieval across sessions**, add `--persist`:
+If durable design documentation is requested or demonstrably useful, add `--persist`; otherwise avoid creating extra design-system files:
 
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persist -p "Project Name"
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persist -p "Project Name"
 ```
 
 This creates:
@@ -391,13 +391,13 @@ This creates:
 
 **With page-specific override:**
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persist -p "Project Name" --page "dashboard"
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persist -p "Project Name" --page "dashboard"
 ```
 
 This also creates:
 - `design-system/pages/dashboard.md` — Page-specific deviations from Master
 
-**How hierarchical retrieval works:**
+**When maintaining an intentionally generated design system:**
 1. When building a specific page (e.g., "Checkout"), first check `design-system/pages/checkout.md`
 2. If the page file exists, its rules **override** the Master file
 3. If not, use `design-system/MASTER.md` exclusively
@@ -416,7 +416,7 @@ Now, generate the code...
 After getting the design system, use domain searches to get additional details:
 
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --domain <domain> [-n <max_results>]
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "<keyword>" --domain <domain> [-n <max_results>]
 ```
 
 **When to use detailed searches:**
@@ -441,7 +441,7 @@ python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --domain <domain> [-n
 Get React Native implementation-specific best practices:
 
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --stack react-native
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "<keyword>" --stack react-native
 ```
 
 ---
@@ -480,12 +480,12 @@ python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --stack react-native
 - Product type: Tool (AI search engine)
 - Target audience: C-end users looking for fast, intelligent search
 - Style keywords: modern, minimal, content-first, dark mode
-- Stack: React Native
+- Stack: the framework/platform used by the requested application
 
-### Step 2: Generate Design System (REQUIRED)
+### Step 2: Optional Design-System Exploration
 
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "AI search tool modern minimal" --design-system -p "AI Search"
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "AI search tool modern minimal" --design-system -p "AI Search"
 ```
 
 **Output:** Complete design system with pattern, style, colors, typography, effects, and anti-patterns.
@@ -494,16 +494,16 @@ python3 skills/ui-ux-pro-max/scripts/search.py "AI search tool modern minimal" -
 
 ```bash
 # Get style options for a modern tool product
-python3 skills/ui-ux-pro-max/scripts/search.py "minimalism dark mode" --domain style
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "minimalism dark mode" --domain style
 
 # Get UX best practices for search interaction and loading
-python3 skills/ui-ux-pro-max/scripts/search.py "search loading animation" --domain ux
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "search loading animation" --domain ux
 ```
 
 ### Step 4: Stack Guidelines
 
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "list performance navigation" --stack react-native
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "list performance navigation" --stack react-native
 ```
 
 **Then:** Synthesize design system + detailed searches and implement the design.
@@ -516,10 +516,10 @@ The `--design-system` flag supports two output formats:
 
 ```bash
 # ASCII box (default) - best for terminal display
-python3 skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system
 
 # Markdown - best for documentation
-python3 skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system -f markdown
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system -f markdown
 ```
 
 ---
@@ -530,8 +530,8 @@ python3 skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system 
 
 - Use **multi-dimensional keywords** — combine product + industry + tone + density: `"entertainment social vibrant content-dense"` not just `"app"`
 - Try different keywords for the same need: `"playful neon"` → `"vibrant dark"` → `"content-first minimal"`
-- Use `--design-system` first for full recommendations, then `--domain` to deep-dive any dimension you're unsure about
-- Always add `--stack react-native` for implementation-specific guidance
+- Use `--design-system` for broad exploration or a targeted `--domain` search for a specific uncertainty
+- Select the matching `--stack` when implementation-specific guidance is useful; React Native examples apply only to React Native projects
 
 ### Common Sticking Points
 
@@ -545,16 +545,9 @@ python3 skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system 
 | Layout breaks on small screens | Quick Reference §5: `mobile-first` + `breakpoint-consistency` |
 | Performance / jank | Quick Reference §3: `virtualize-lists` + `main-thread-budget` + `debounce-throttle` |
 
-### Pre-Delivery Checklist
+### Proportionate verification
 
-- Run `--domain ux "animation accessibility z-index loading"` as a UX validation pass before implementation
-- Run through Quick Reference **§1–§3** (CRITICAL + HIGH) as a final review
-- Test on 375px (small phone) and landscape orientation
-- Verify behavior with **reduced-motion** enabled and **Dynamic Type** at largest size
-- Check dark mode contrast independently (don't assume light mode values work)
-- Confirm all touch targets ≥44pt and no content hidden behind safe areas
-
----
+Check the changed interaction, relevant screen sizes, and affected accessibility behavior. Select theme, reduced-motion, Dynamic Type, or platform checks when the change can affect them. A search command, full design-system generation, and every checklist item are not required for each delivery.
 
 ## Common Rules for Professional UI
 
@@ -616,10 +609,9 @@ Scope notice: The rules below are for App UI (iOS/Android/React Native/Flutter),
 
 ---
 
-## Pre-Delivery Checklist
+## Optional mobile-UI review reference
 
-Before delivering UI code, verify these items:
-Scope notice: This checklist is for App UI (iOS/Android/React Native/Flutter).
+Select checks relevant to the changed behavior and supported platforms. These examples concern iOS/Android/React Native/Flutter; they are not a universal completion checklist for web or routine UI work. Adapt visual preferences to the product.
 
 ### Visual Quality
 - [ ] No emojis used as icons (use SVG instead)
@@ -641,7 +633,7 @@ Scope notice: This checklist is for App UI (iOS/Android/React Native/Flutter).
 - [ ] Secondary text contrast >=3:1 in both light and dark mode
 - [ ] Dividers/borders and interaction states are distinguishable in both modes
 - [ ] Modal/drawer scrim opacity is strong enough to preserve foreground legibility (typically 40-60% black)
-- [ ] Both themes are tested before delivery (not inferred from a single theme)
+- [ ] Check affected themes when changing theme-dependent styling
 
 ### Layout
 - [ ] Safe areas are respected for headers, tab bars, and bottom CTA bars

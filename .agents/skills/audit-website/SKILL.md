@@ -1,12 +1,10 @@
 ---
 name: audit-website
-description: Audit websites for SEO, performance, security, technical, content, and 15 other issue cateories with 230+ rules using the squirrelscan CLI. Returns LLM-optimized reports with health scores, broken links, meta tag analysis, and actionable recommendations. Use to discover and asses website or webapp issues and health.
+description: "Use squirrelscan for a requested website audit or when a scoped crawl helps diagnose SEO, accessibility, performance, or technical issues. Ordinary implementation and focused fixes do not require a crawl."
 license: See LICENSE file in repository root
-compatibility: Requires squirrel CLI installed and accessible in PATH
 metadata:
   author: squirrelscan
   version: "1.22"
-allowed-tools: Bash(squirrel:*) Read Edit Grep Glob
 ---
 
 # Website Audit Skill
@@ -80,7 +78,7 @@ Use this skill when you need to:
 - Compare site health before/after changes
 - Improve website performance, accessibility, SEO, security and more.
 
-You should re-audit as often as possible to ensure your website remains healthy and performs well. 
+Re-audit when changed behavior or unresolved evidence warrants it; routine edits do not require repeated crawls.
 
 ## Prerequisites
 
@@ -95,13 +93,7 @@ squirrel --version
 
 ## Setup
 
-Run `squirrel init` to create a `squirrel.toml` config in the current directory. If none exists, create one and specify a project name:
-
-```bash
-squirrel init -n my-project
-# overwrite existing config
-squirrel init -n my-project --force
-```
+Use an existing squirrel configuration when useful. If the requested audit needs a new configuration, initialize one with `squirrel init -n my-project`. Preserve an existing configuration; do not overwrite it to perform an ordinary audit.
 
 ## Usage
 
@@ -119,25 +111,11 @@ the 'audit' command is a wrapper around these three processes and runs them sequ
 squirrel audit https://example.com --format llm
 ```
 
-YOU SHOULD always prefer format option llm - it was made for you and provides an exhaustive and compact output format.
+Choose the output format and crawl depth suited to the task. `--format llm` is a convenient compact format; a second deep scan is optional.
 
-FIRST SCAN should be a surface scan, which is a quick and shallow scan of the website to gather basic information about the website, such as its structure, content, and technology stack. This scan can be done quickly and without impacting the website's performance.
+Use the URL or local preview established by the task. Ask for a target only if it cannot be determined. For local fixes, a local preview usually provides the relevant evidence; do not force a live-site choice or crawl.
 
-SECOND SCAN should be a deep scan, which is a thorough and detailed scan of the website to gather more information about the website, such as its security, performance, and accessibility. This scan can take longer and may impact the website's performance.
-
-If the user doesn't provide a website to audit, ask which URL they'd like audited.
-
-You should PREFER to audit live websites - only there do we get a TRUE representation of the website and performance or rendering issuers. 
-
-If you have both local and live websites to audit, prompt the user to choose which one to audit and SUGGEST they choose live.
-
-You can apply fixes from an audit on the live site against the local code.
-
-When planning scope tasks so they can run concurrently as sub-agents to speed up fixes. 
-
-When implementing fixes take advantage of subagents to speed up implementation of fixes.
-
-After applying fixes, verify the code still builds and passes any existing checks in the project.
+Apply authorized local fixes directly. Choose validation for the affected behavior, and preserve private data and the scope of external actions. Delegation is optional when authorized and useful.
 
 ### Basic Workflow
 
@@ -168,46 +146,13 @@ squirrel report --regression-since example.com --format llm
 
 Diff mode supports `console`, `text`, `json`, `llm`, and `markdown`. `html` and `xml` are not supported.
 
-### Running Audits
+### Scoped audits and fixes
 
-When running an audit:
+Report actionable findings concisely with their evidence and impact. If implementation is already authorized, fix the relevant local code without another approval round. Keep an audit-only request read-only.
 
-1. **Present the report** - show the user the audit results and score
-2. **Propose fixes** - list the issues you can fix and ask the user to confirm before making changes
-3. **Parallelize approved fixes** - use subagents for bulk content edits (alt text, headings, descriptions)
-4. **Iterate** - fix batch → re-audit → present results → propose next batch
-5. **Pause for judgment** - broken links, structural changes, and anything ambiguous should be flagged for user review
-6. **Show before/after** - present score comparison after each fix batch
+Use focused verification after a fix. A full crawl, exhaustive report, score target, separate review, or subagent team is not a completion prerequisite. Continue only while remaining findings are in scope and actionable; raise genuinely missing product decisions rather than inventing them.
 
-- **Iteration Loop**: After fixing a batch of issues, re-audit and continue fixing until:
-  - Score reaches target (typically 85+), OR
-  - Only issues requiring human judgment remain (e.g., "should this link be removed?")
-
-- **Treat all fixes equally**: Code changes and content changes are equally important.
-
-- **Parallelize content fixes**: For issues affecting multiple files:
-  - Spawn subagents to fix in parallel
-  - Example: 7 files need alt text → spawn 1-2 agents to fix all
-  - Example: 30 files have heading issues → spawn agents to batch edit
-
-- **Completion criteria**:
-  - ✅ All errors fixed
-  - ✅ All warnings fixed (or documented as requiring human review)
-  - ✅ Re-audit confirms improvements
-  - ✅ Before/after comparison shown to user
-
-After fixes are applied, ask the user if they'd like to review the changes.
-
-### Score Targets
-
-| Starting Score | Target Score | Expected Work |
-|----------------|--------------|---------------|
-| < 50 (Grade F) | 75+ (Grade C) | Major fixes |
-| 50-70 (Grade D) | 85+ (Grade B) | Moderate fixes |
-| 70-85 (Grade C) | 90+ (Grade A) | Polish |
-| > 85 (Grade B+) | 95+ | Fine-tuning |
-
-A site is only considered COMPLETE and FIXED when scores are above 95 (Grade A) with coverage set to FULL (--coverage full).
+Scores can help compare equivalent crawls, but they do not by themselves establish security or release readiness.
 
 ### Issue Categories
 
@@ -222,7 +167,7 @@ A site is only considered COMPLETE and FIXED when scores are above 95 (Grade A) 
 | HTTP→HTTPS links | Find and replace in content | Yes |
 | Broken links | Manual review (flag for user) | No |
 
-**For parallelizable fixes**: Spawn subagents with specific file assignments.
+Independent file edits may be delegated when that is authorized and helpful; direct implementation is equally valid.
 
 ### Content File Fixes
 
@@ -233,14 +178,9 @@ Many issues require editing content files. These are equally important as code f
 - **Meta descriptions**: Extend short descriptions in frontmatter
 - **HTTP links**: Update insecure links to HTTPS
 
-### Parallelizing Fixes with Subagents
+### Optional parallel work
 
-When the user approves a batch of fixes, you can use subagents to apply them in parallel:
-
-- **Ask the user first** — always confirm which fixes to apply before spawning subagents
-- Group 3-5 files per subagent for the same fix type
-- Only parallelize independent files (no shared components or config)
-- Spawn multiple subagents in a single message for concurrent execution
+If using collaborators, give them independent files or responsibilities and preserve concurrent work. Delegation does not require a separate approval ceremony when it is already authorized.
 
 ### Advanced Options
 
